@@ -13,6 +13,12 @@ import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.binding.Bindings;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.Group;
+
 
 public class JavaMediaPlayerApp extends Application {
 	public static void main(String[] args) {
@@ -22,7 +28,7 @@ public class JavaMediaPlayerApp extends Application {
 	@Override
 	public void start(Stage stage) {
 		// Locate the media content in the CLASSPATH
-		URL mediaUrl = getClass().getResource("yoze.mp4");
+		URL mediaUrl = getClass().getResource("test3.mp4");
 		String mediaStringUrl = mediaUrl.toExternalForm();
 
 		// Create a Media
@@ -35,9 +41,13 @@ public class JavaMediaPlayerApp extends Application {
 
 		// Create a 400X300 MediaView
 		MediaView mediaView = new MediaView(player);
-		mediaView.setFitWidth(400);
-		mediaView.setFitHeight(300);
-		mediaView.setSmooth(true);
+		DoubleProperty mvw = mediaView.fitWidthProperty();
+		DoubleProperty mvh = mediaView.fitHeightProperty();
+		mvw.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
+		mvh.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
+		mediaView.setPreserveRatio(true);
+		setScene(new Scene(new Group(mediaView), size.getWidth(), size.getHeight()));
+	//	mediaView.setSmooth(true);
 
 		// Create the DropShadow effect
 		DropShadow dropshadow = new DropShadow();
